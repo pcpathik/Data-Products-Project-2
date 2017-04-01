@@ -1,0 +1,27 @@
+---
+title: "PeerGraded Assignment 2"
+author: "Pathik Chamaria"
+date: "March 31, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(plotly)
+library(ggplot2)
+dow_jones_index <- read.csv("D:/Data Science/Visualization/dow_jones_index.data")
+```
+
+```{r}
+dow_jones_index <- subset(dow_jones_index,select = c("stock","date","open"),
+                          subset = dow_jones_index$stock %in% c("MSFT","GE","HPQ","AXP","BAC","CSCO"))
+dow_jones_index[,"date"] <- as.Date(dow_jones_index[,"date"],"%m/%d/%Y")
+dow_jones_index$open <- gsub("\\$","",dow_jones_index$open)
+dow_jones_index$open <- as.numeric(dow_jones_index$open)
+a <-  ggplot() + geom_line(data = dow_jones_index, aes(x=date, y=open, col=stock), size=1)
+a <-  a + scale_color_brewer(type = "qual", palette = "Dark2")
+a <-  a+ggtitle("Opening values of various stock") + xlab("Time") + ylab("Price in dollars")
+
+ggplotly(a)
+
+```
